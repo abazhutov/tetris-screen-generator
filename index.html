@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Tetris screen generator</title>
+	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+	<script> 
+		arr_cells = []
+	</script>
+
+	<style>
+		body{
+			background: black;
+			margin: 0;
+		}
+
+		div.tetris_body {
+      --tetris-body-width: 428px;
+		  --tetris-body-height: 957px;
+
+			height: 100vh;
+			width: 100vw;
+
+			background: darkcyan center/contain url("img/tetris_body.webp") no-repeat;
+			background-size: 
+				calc(var(--tetris-body-width)*2.3) 
+				calc(var(--tetris-body-height)*2.3);
+    	background-position: center;
+
+    	padding: 1276px 0px 0px 116px;
+		}
+
+		div.tetris-screen{
+			--tetris-sreen-width: 220px;
+		  --tetris-sreen-height: 440px;
+
+/*		  display: grid;
+		  grid-row: grid-row-start / grid-row-end;
+		  grid-template-columns: auto auto auto auto auto auto auto auto;
+			grid-row: 4 / span 4;
+		  gap: 0px;
+		  grid-gap:0;*/
+
+			width: var(--tetris-sreen-width);
+			height: var(--tetris-sreen-height);
+
+			background-color: #9AA680;
+
+			position: absolute;
+			left: calc(50vw - var(--tetris-sreen-width)/2); 
+			top: calc(50vh - var(--tetris-sreen-height) / 2); 
+
+			border: solid #212317 5px;
+		}
+
+		.active_cell, .inactive_cell {
+			width: 20px;
+			height: 20px;
+			margin: 3px;
+
+			background-image: url("img/cell.svg");
+		}
+
+		.inactive_cell{
+			opacity: 30%;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div class ="tetris_body">
+		<div class = "tetris-screen" alt = "Источник изображения https://ir.ozone.ru/s3/multimedia-a/wc1000/6202170682.webp">
+				<div class = "active_cell"></div>	
+				<div class = "active_cell"></div>	
+				<div class = "active_cell"></div>	
+
+				<div class = "inactive_cell"></div>	
+				<div class = "inactive_cell"></div>	
+				<div class = "inactive_cell"></div>	
+
+				<div class = "active_cell"></div>	
+				<div class = "active_cell"></div>	
+				<div class = "active_cell"></div>	
+
+				<div class = "inactive_cell"></div>	
+				<div class = "inactive_cell"></div>	
+				<div class = "inactive_cell"></div>	
+
+				<div class = "inactive_cell"></div>	
+				<div class = "inactive_cell"></div>	
+				<div class = "inactive_cell"></div>	
+</body>
+
+</html>
