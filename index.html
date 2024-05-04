@@ -1,98 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Tetris screen generator</title>
 	<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-	
-	<style>
-		body{
-			background: black;
-			margin: 0;
-		}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>t screen generator</title>
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  
+  <style>
+    :root {
+      --t-body-width: calc(428px * 2.3);
+      --t-body-height: calc(957px * 2.3);
+      --t-body-padding-top: calc(var(--t-body-height)/2/0.86);
+      --t-body-padding-left: calc(var(--t-body-width)/2/4);
+      --t-body-background: radial-gradient(#bf1fbd, #75d9d7);
 
-		div.tetrisBody {
-      --tetris-body-width: 428px;
-		  --tetris-body-height: 957px;
+      --t-sreen-width: 216px;
+      --t-sreen-height: 436px;
+      --t-screen-columns: 10;
+      --t-screen-rows: 20;
+      --t-screen-back-color:  #9AA680;
+      --t-screen-border-color:  #212317;
+    }
 
-			height: 100vh;
-			width: 100vw;
+    body{
+      background: black;
+      margin: 0;
+    }
 
-			background: darkcyan center/contain url("img/tetris_body.webp") no-repeat;
-			background-size: 
-				calc(var(--tetris-body-width)*2.3) 
-				calc(var(--tetris-body-height)*2.3);
-    	background-position: center;
+    div.tBody {
+      height: 100vh;
+      width: 100vw;
 
-    	padding: 1278px 0px 0px 118px;
-		}
+      background: center/contain url("img/tetris_body.webp") no-repeat,
+        var(--t-body-background);
+      background-size: 
+        var(--t-body-width)
+        var(--t-body-height);
+      background-position: center;
 
-		div.tetrisScreen {
-			--tetris-sreen-width: 216px;
-		  --tetris-sreen-height: 436px;
+      padding: var(--t-body-padding-top) 0px 0px var(--t-body-padding-left);
+    }
 
-			display: grid;
-			grid-template-columns: repeat(10, auto);
-			grid-template-rows: repeat(20, auto);
-			gap: 2px;
+    div.tScreen {
 
-			width: var(--tetris-sreen-width);
-			height: var(--tetris-sreen-height);
+      display: grid;
+      grid-template-columns: repeat(var(--t-screen-columns), auto);
+      grid-template-rows: repeat(var(--t-screen-rows), auto);
+      gap: 2px;
 
-			background-color: #9AA680;
+      width: var(--t-sreen-width);
+      height: var(--t-sreen-height);
 
-			position: absolute;
-			left: calc(50vw - var(--tetris-sreen-width)/2); 
-			top: calc(50vh - var(--tetris-sreen-height) / 2); 
+      background-color: #9AA680;
 
-			border: solid #212317 5px;
-			padding: 2px;
-		}
+      position: absolute;
+      left: calc(50vw - var(--t-sreen-width)/2); 
+      top: calc(50vh - var(--t-sreen-height)/2); 
 
-		.cell {
+      border: solid var(--t-screen-border-color) 5px;
+      padding: 2px;
+    }
+
+    .cell {
       display: flex;
       align-items: center;
-			
-			border: none; 
-			outline: none;
+      
+      border: none; 
+      outline: none;
 
-			opacity: 30%;
+      opacity: 30%;
 
-			background: #9AA680 url("img/cell.svg");
-		}
+      background: var(--t-screen-back-color) url("img/cell.svg");
+    }
 
-		.cell.active{
-			opacity: 100%;
-		}
-	</style>
+    .cell.active{
+      opacity: 100%;
+    }
+  </style>
 </head>
 
 <body>
-	<div class = "tetrisBody" id = "tetrisBody">
-		<div class = "tetrisScreen" id = "tetrisScreen" alt = "Источник изображения https://ir.ozone.ru/s3/multimedia-a/wc1000/6202170682.jpg">
+  <div class = "tBody" id = "tBody">
+    <div class = "tScreen" id = "tScreen" alt = "Источник изображения https://ir.ozone.ru/s3/multimedia-a/wc1000/6202170682.jpg">
 
-	<script type="text/javascript"> 
-		const tetrisScreen = document.getElementById('tetrisScreen');
+  <script type="text/javascript"> 
+    const tScreen = document.getElementById('tScreen');
+    const style = getComputedStyle(document.documentElement);
+    const cntCells = style.getPropertyValue('--t-screen-columns')
+      * style.getPropertyValue('--t-screen-rows');
 
-	  function handleCellClick(id) {
+    function handleCellClick(id) {
       const cell = document.getElementById(id);
       cell.classList.toggle('active');
-	  }
+    }
 
-		function renderTetrisScreen() {
-			for (var i = 1; i <= 200; i++) {
-				const cell = document.createElement('button');
-				cell.classList.add('cell');
-				cell.setAttribute('id', i);
-				cell.setAttribute('onClick', 'handleCellClick(this.id)');
-				tetrisScreen.appendChild(cell);
-			}
-		}
+    function renderTScreen() {
+      for (var i = 1; i <= cntCells; i++) {
+        const cell = document.createElement('button');
+        cell.classList.add('cell');
+        cell.setAttribute('id', i);
+        cell.setAttribute('onClick', 'handleCellClick(this.id)');
+        tScreen.appendChild(cell);
+      }
+    }
 
-		renderTetrisScreen();
-	</script>
+    renderTScreen(); //отрисовка "экрана"
 
+  </script>
 </body>
 
 </html>
