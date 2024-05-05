@@ -76,37 +76,129 @@
     .cell.active{
       opacity: 100%;
     }
+
+    #tExportButton, #tImportButton, .fileInputLabel{
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      opacity: 80%;
+      left: calc(50vw - var(--t-sreen-width)/2); 
+      top: calc(50vh - var(--t-sreen-height)/2); 
+      margin:1145px 0px 0px 350px;
+      border-radius: 50%;
+      border: none; 
+      outline: none;
+      font-size: 1.7em;
+      background: #ECB703;
+      user-select: none;
+    }
+
+    #tImportButton {
+      opacity: 0;
+      z-index: -1;
+    }
+
+    #fileInputLabel {
+      width: 60px;
+      height: 60px;
+      align-content: center;
+      text-align: center;
+      font-size: 1.1em;
+      margin: 939px 0px 0px -98px;
+
+    }
+
+
   </style>
 </head>
 
 <body>
-  <div class = "tBody" id = "tBody">
-    <div class = "tScreen" id = "tScreen" alt = "Источник изображения https://ir.ozone.ru/s3/multimedia-a/wc1000/6202170682.jpg">
+  <div class="tBody" id="tBody">
+    <div class="tScreen" id="tScreen" alt="https://ir.ozone.ru/s3/multimedia-a/wc1000/6202170682.jpg"></div>
+    <button type="button" id="tExportButton">export<br>json</button>
+    <label id="fileInputLabel" for="tImportButton">import<br>json</label>
+    <input type="file" value = "impoprt <br> json" id="tImportButton" name="files[]" />
+  </div>
 
   <script type="text/javascript"> 
-    const tScreen = document.getElementById('tScreen');
     const style = getComputedStyle(document.documentElement);
-    const cntCells = style.getPropertyValue('--t-screen-columns')
-      * style.getPropertyValue('--t-screen-rows');
+    const cntCells = style.getPropertyValue('--t-screen-columns') 
+    	* style.getPropertyValue('--t-screen-rows');
+
+    function JSONFromFile(e) {
+      clearScreen();
+
+    	const file = e.target.files[0];
+    	const fr = new FileReader();		
+			
+    	if(file.type == 'application/json'){  
+	    	fr.onload = (event) => {
+	        renderTScreen(JSON.parse(event.target.result));
+	      };
+	      
+	      fr.readAsText(file); 
+    	}
+    }	
+
+    function clearScreen() {
+      const cells = document.getElementsByClassName('cell');
+
+      for (let cell of cells) {
+        cell.classList.remove('active');
+      }
+    };
+
+    function exportData() {
+      const cells = document.getElementsByClassName('cell');
+      const jsonObj = [];
+      for (let cell of cells) {
+        jsonObj.push({
+          'id': cell.getAttribute("id"),
+          'active': cell.classList.contains("active")
+        });
+      };
+
+      JSONToFile(jsonObj, 'exportTScreenData');
+    };
+
+    function JSONToFile (obj, filename) {
+      const blob = new Blob([JSON.stringify(obj, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${filename}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
 
     function handleCellClick(id) {
       const cell = document.getElementById(id);
       cell.classList.toggle('active');
     }
 
-    function renderTScreen() {
-      for (var i = 1; i <= cntCells; i++) {
+    function renderTScreen(obj) {
+      const tScreen = document.getElementById('tScreen');
+      const tExportButton = document.getElementById('tExportButton');
+      const tImportButton = document.getElementById('tImportButton');
+      
+      for (let i = 1; i <= cntCells; i++) {
         const cell = document.createElement('button');
-        cell.classList.add('cell');
-        cell.setAttribute('id', i);
-        cell.setAttribute('onClick', 'handleCellClick(this.id)');
-        tScreen.appendChild(cell);
+        
+        if (obj == null) {
+	        cell.classList.add('cell');
+	        cell.setAttribute('id', i);
+	        cell.setAttribute('onClick', 'handleCellClick(this.id)');
+	        tScreen.appendChild(cell);
+        } else if ((obj != null) && obj[i-1].active) {
+        	handleCellClick(obj[i-1].id)
+        }
       }
+
+      tExportButton.addEventListener('click', exportData);
+      tImportButton.addEventListener("change", JSONFromFile);
     }
 
-    renderTScreen(); //отрисовка "экрана"
-
+    renderTScreen(null); // Отрисовка "экрана"
   </script>
 </body>
-
 </html>
